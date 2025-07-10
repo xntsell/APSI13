@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  apache-forground:
+    build: .
+    container_name: apache-forground
+    image: latest
+    volumes:
+      - ./src:/var/www/html
+      - ./httpd.vhost.conf:/etc/apache2/sites-available/000-default.conf
+    ports:
+      - 83:80
+
+  db_apsi:
+    image: mariadb:10.2
+    container_name: db_apsi
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "12307:3306"
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./db/conf.d:/etc/mysql/conf.d:ro
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: 123
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
