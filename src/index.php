@@ -34,17 +34,26 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a class="btn-tambah" href="tambah_blog.php">+ Tambah Blog</a>
 </div>
 
-<?php if (count($blogs) > 0): ?>
+<?php if (count ($blogs) > 0): ?>
     <?php foreach ($blogs as $blog): ?>
         <div class="blog">
-            <h3><?= htmlspecialchars($blog['judul']) ?></h3>
+            <h3><?= htmlspecialchars($blog['judul']) ?> </h3>
             <p><?= nl2br(htmlspecialchars($blog['deskripsi'])) ?></p>
-            <small><i>Diposting oleh: <?= htmlspecialchars($blog['penulis']) ?> | <?= $blog['created_at'] ?></i></small>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>Tidak ada postingan blog untuk saat ini.</p>
-<?php endif; ?>
+            <small> <i>diposting oleh: <?= htmlspecialchars($blog['penulis']) ?> | 
+            <?= $blog['created_at'] ?> </i> </small>
 
+        <?php if ($_SESSION['user_id'] == $blog['user_id']): ?>
+        <div class="actions">
+            <a href="edit_blog.php?id=<?= $blog['id'] ?>">✏️ Edit</a>
+            <a href="hapus_blog.php?id=<?= $blog['id'] ?>" 
+            onclick="return confirm('Yakin ingin menghapus blog ini?')">🗑️ Hapus</a>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endforeach; ?>
+    <?php else: ?>
+            <p>Tidak ada artikel blog yang tersedia.</p>
+    <?php endif; ?>
+        
 </body>
 </html>
